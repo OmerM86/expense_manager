@@ -139,13 +139,12 @@ function ExpenseViewForm({ action, setAction }: ExpenseFormProps) {
     category: '',
   });
 
-  const handleData = async () => {
-    const expense = await getExpense(action?.eid);
-    if (isExpense(expense)) setData(expense);
-    else setErrors(expense);
-  };
-
   useEffect(() => {
+    const handleData = async () => {
+      const expense = await getExpense(action?.eid);
+      if (isExpense(expense)) setData(expense);
+      else setErrors(expense);
+    };
     handleData();
   }, []);
 
@@ -203,20 +202,25 @@ function ExpenseEditForm({
   const [optionsData, setOptionsData] = useState<Category[]>([]);
   const [category, setCategory] = useState<string | number>();
 
-  const handleData = async () => {
-    const expense = await getExpense(action?.eid);
-    if (isExpense(expense)) {
-      setTitle(expense.title);
-      setAmount(expense.amount);
-      setCategory(expense.category);
-    } else setErrors(expense);
-  };
+  useEffect(() => {
+    const handleData = async () => {
+      const expense = await getExpense(action?.eid);
+      if (isExpense(expense)) {
+        setTitle(expense.title);
+        setAmount(expense.amount);
+        setCategory(expense.category);
+      } else setErrors(expense);
+    };
 
-  const handleFetch = async () => {
-    const fetchedData = await fetchCategories();
-    if (isCategory(fetchedData)) setOptionsData(fetchedData);
-    else setErrors(fetchedData);
-  };
+    const handleFetch = async () => {
+      const fetchedData = await fetchCategories();
+      if (isCategory(fetchedData)) setOptionsData(fetchedData);
+      else setErrors(fetchedData);
+    };
+
+    handleData();
+    handleFetch();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -243,7 +247,7 @@ function ExpenseEditForm({
     }
 
     try {
-      let cid: number = -1;
+      let cid: number = parseInt(category ? category?.toString() : '-1');
 
       optionsData.forEach((option) => {
         if (option.name === category) {
@@ -278,11 +282,6 @@ function ExpenseEditForm({
       setErrors(['An unexpected error occurred']);
     }
   };
-
-  useEffect(() => {
-    handleData();
-    handleFetch();
-  }, []);
 
   const options = useMemo(() => {
     const optionList = optionsData.map(
@@ -351,11 +350,14 @@ function ExpenseDeleteForm({
     category: '',
   });
 
-  const handleData = async () => {
-    const expense = await getExpense(action?.eid);
-    if (isExpense(expense)) setData(expense);
-    else setErrors(expense);
-  };
+  useEffect(() => {
+    const handleData = async () => {
+      const expense = await getExpense(action?.eid);
+      if (isExpense(expense)) setData(expense);
+      else setErrors(expense);
+    };
+    handleData();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -380,10 +382,6 @@ function ExpenseDeleteForm({
       setErrors(['An unexpected error occurred']);
     }
   };
-
-  useEffect(() => {
-    handleData();
-  }, []);
 
   return (
     <form
