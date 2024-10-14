@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { id, title, amount, category } = await request.json();
+    const { id, title, amount, category, timestamp } = await request.json();
     const response = await fetch(`http://${process.env.NEST_HOST}:3001/expense/${id}`, {
       method: 'PATCH',
       headers: {
@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
         title,
         amount: String(amount),
         cid: parseInt(category),
+        timestamp: timestamp
       }),
     });
     const data = await response.json();

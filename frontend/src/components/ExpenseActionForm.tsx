@@ -27,6 +27,7 @@ interface Expense {
   title: string;
   amount: number;
   category: string;
+  timestamp: string;
 }
 
 interface Category {
@@ -90,10 +91,16 @@ async function getExpense(
     const data = await response.json();
 
     if (response.ok) {
+      const date = new Date(data.timestamp);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); 
+      const day = String(date.getDate()).padStart(2, '0');
+      
       return {
         title: data.title,
         amount: data.amount,
         category: data.category.name,
+        timestamp: `${year}-${month}-${day}`
       };
     } else {
       return [data.message || 'Failed to get expense data'];
@@ -137,6 +144,7 @@ function ExpenseViewForm({ action, setAction }: ExpenseFormProps) {
     title: '',
     amount: 0,
     category: '',
+    timestamp: '',
   });
 
   useEffect(() => {
@@ -175,6 +183,13 @@ function ExpenseViewForm({ action, setAction }: ExpenseFormProps) {
         value={data.category}
         disabled
       />
+      <InputComponent
+        name={'date'}
+        label="Date"
+        type="date"
+        value={data.timestamp}
+        disabled
+      />
       <ButtonComponent
         title="Close"
         className="border-[1px] border-primary-subtle bg-primary"
@@ -201,6 +216,7 @@ function ExpenseEditForm({
   const [amount, setAmount] = useState<number>();
   const [optionsData, setOptionsData] = useState<Category[]>([]);
   const [category, setCategory] = useState<string | number>();
+  const [date, setDate] = useState<string>();
 
   useEffect(() => {
     const handleData = async () => {
@@ -209,6 +225,7 @@ function ExpenseEditForm({
         setTitle(expense.title);
         setAmount(expense.amount);
         setCategory(expense.category);
+        setDate(expense.timestamp);
       } else setErrors(expense);
     };
 
@@ -240,6 +257,10 @@ function ExpenseEditForm({
       newErrors.push('Category is required');
     }
 
+    if (!date) {
+      newErrors.push('Date is required');
+    }
+
     if (newErrors.length > 0) {
       // do not proceed further since validation errors exist
       setErrors(newErrors);
@@ -267,6 +288,7 @@ function ExpenseEditForm({
           title: title,
           amount: amount,
           category: cid,
+          timestamp: date
         }),
       });
 
@@ -322,6 +344,13 @@ function ExpenseEditForm({
         value={category}
         onChange={(e) => setCategory(e.target.value)}
       />
+       <InputComponent
+        name={'date'}
+        label="Date"
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
       <ButtonComponent
         title="Update"
         className="border-[1px] border-primary-subtle bg-primary"
@@ -348,6 +377,7 @@ function ExpenseDeleteForm({
     title: '',
     amount: 0,
     category: '',
+    timestamp: ''
   });
 
   useEffect(() => {
@@ -410,6 +440,13 @@ function ExpenseDeleteForm({
         value={data.category}
         disabled
       />
+      <InputComponent
+        name={'date'}
+        label="Date"
+        type="date"
+        value={data.timestamp}
+        disabled
+      />
       <ButtonComponent
         title="Delete"
         className="border-[1px] border-primary-subtle bg-red-500"
@@ -431,6 +468,7 @@ function ExpenseCreateForm({ setAction, fetchExpenses }: ExpenseFormProps) {
   const [amount, setAmount] = useState<number>();
   const [optionsData, setOptionsData] = useState<Category[]>([]);
   const [category, setCategory] = useState<string | number>();
+  const [date, setDate] = useState<string>();
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
@@ -473,6 +511,10 @@ function ExpenseCreateForm({ setAction, fetchExpenses }: ExpenseFormProps) {
       newErrors.push('Category is required');
     }
 
+    if (!date) {
+      newErrors.push('Date is required');
+    }
+
     if (newErrors.length > 0) {
       // do not proceed further since validation errors exist
       setErrors(newErrors);
@@ -485,7 +527,7 @@ function ExpenseCreateForm({ setAction, fetchExpenses }: ExpenseFormProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, amount, category }),
+        body: JSON.stringify({ title, amount, category, date }),
       });
       const data = await response.json();
 
@@ -526,6 +568,13 @@ function ExpenseCreateForm({ setAction, fetchExpenses }: ExpenseFormProps) {
         options={options}
         onChange={(e) => setCategory(e.target.value)}
         value={category}
+      />
+      <InputComponent
+        name={'date'}
+        label="Date"
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
       />
       <ButtonComponent
         title="Submit"

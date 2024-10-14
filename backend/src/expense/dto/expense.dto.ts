@@ -14,4 +14,8 @@ export class ExpenseDto {
   @IsInt()
   @IsNotEmpty()
   cid: number;
+
+  @IsString()
+  @IsNotEmpty()
+  timestamp: string;
 }
