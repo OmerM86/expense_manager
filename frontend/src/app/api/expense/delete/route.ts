@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const { id } = await request.json();
 
-    const response = await fetch(`http://backend:3001/expense/${id}`, {
+    const response = await fetch(`http://${process.env.NEST_HOST}:3001/expense/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${cookies().get('token')?.value || ''}`,

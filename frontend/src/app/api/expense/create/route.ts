@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const { title, amount, category } = await request.json();
 
-    const response = await fetch('http://backend:3001/expense/', {
+    const response = await fetch(`http://${process.env.NEST_HOST}:3001/expense/`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${cookies().get('token')?.value || ''}`,

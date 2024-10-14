@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch('http://backend:3001/category/', {
+    const response = await fetch(`http://${process.env.NEST_HOST}:3001/category/`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${cookies().get('token')?.value || ''}`,

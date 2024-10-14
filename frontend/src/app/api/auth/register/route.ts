@@ -4,7 +4,7 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
-    const response = await fetch('http://backend:3001/users/register', {
+    const response = await fetch(`http://${process.env.NEST_HOST}:3001/users/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

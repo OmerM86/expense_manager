@@ -39,6 +39,8 @@ services:
     container_name: expense_manager_frontend
     ports:
       - '${NEXT_PORT}:${NEXT_PORT}'
+    environment:
+      - NEST_HOST=${NEST_HOST}
     volumes:
       - ./frontend:/app/src
 

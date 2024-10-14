@@ -38,6 +38,7 @@ PG_DB=
 
 # nestjs backend enviormental variables
 NEST_PORT=
+NEST_HOST=
 
 # nextjs frontend enviormental variables
 NEXT_PORT=
