@@ -7,7 +7,7 @@ function ExpensePage() {
     <>
       <SideNavigation />
       <div className="mb-[160px] ml-[80px] mt-[60px]">
-        <ExpenseListGroup />
+        <ExpenseListGroup isExpense={true} />
       </div>
     </>
   );

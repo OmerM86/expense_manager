@@ -17,11 +17,15 @@ export interface Expense {
   };
 }
 
-interface Data {
+export interface Data {
   [key: string]: Expense[];
 }
 
-function ExpenseListGroup() {
+interface ExpenseListGroupProps {
+  isExpense?: boolean;
+}
+
+function ExpenseListGroup({isExpense}: ExpenseListGroupProps) {
   const [data, setData] = useState<Data>({});
   const [action, setAction] = useState<ActionProps>({
     action: Action.none,
@@ -70,7 +74,6 @@ function ExpenseListGroup() {
     let total = 0;
 
     for (const month in data) {
-      console.log(month, data[month]);
       const expenses = data[month];
       expenses.forEach((expense) => {
         const amount = expense.amount;
@@ -125,12 +128,14 @@ function ExpenseListGroup() {
           />
         );
       })}
-      <TotalExpenseItem
-        total={totalExpense}
-        action={action}
-        fetchExpenses={fetchExpenses}
-        setAction={setAction}
-      />
+      {isExpense && (
+        <TotalExpenseItem
+          total={totalExpense}
+          action={action}
+          fetchExpenses={fetchExpenses}
+          setAction={setAction}
+        />
+      )}
     </div>
   );
 }
