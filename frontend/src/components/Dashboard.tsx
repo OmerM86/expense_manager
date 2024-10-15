@@ -96,12 +96,13 @@ function Dashboard() {
     return [food, transport, entertainment];
   };
   
-  const sortMonths = (data: Data): string[]=> {
-    const months: string[] = [];
-    for (const month in data) {
-      months.push(month.split(' ')[0])
-    }
-    return months;
+  const sortMonths = (data: Data): string[] => {  
+    const sortedMonths = Object.keys(data).sort((a, b) => { // sort months
+      const dateA = new Date(a + ' 1');  // + 1 to set the date
+      const dateB = new Date(b + ' 1');  // + 1 to set the date
+      return dateB.getTime() + dateA.getTime();
+    });
+    return sortedMonths;
   };
  
   const sortExpenses = (data: Data) => {

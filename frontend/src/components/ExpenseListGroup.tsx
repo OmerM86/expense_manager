@@ -89,19 +89,20 @@ function ExpenseListGroup({isExpense}: ExpenseListGroupProps) {
   const sortExpenses = (data: Data): Data => {
     const groupedEntries: Data = {};
 
-    Object.keys(data).forEach((key) => {
-      groupedEntries[key] = data[key].sort((a, b) => {
+    Object.keys(data).forEach((key) => { 
+      groupedEntries[key] = data[key].sort((a, b) => { // sort by days
         return (
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
       });
     });
 
-    const sortedKeys = Object.keys(groupedEntries).sort((a, b) => {
-      return (
-        new Date(b + ' 1').getFullYear() - new Date(a + ' 1').getFullYear()
-      );
+    const sortedKeys = Object.keys(groupedEntries).sort((a, b) => { // sort months
+      const dateA = new Date(a + ' 1');  // + 1 to set the date
+      const dateB = new Date(b + ' 1');  // + 1 to set the date
+      return dateB.getTime() - dateA.getTime();
     });
+
     const sortedGroupedEntries: Data = {};
 
     sortedKeys.forEach((key) => {
