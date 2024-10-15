@@ -61,12 +61,11 @@ docker compose up --build
 
 ### Step 4: Create Table
 
-Login to the postegres admin panel and create a new server, you can access it in your web browser at:
+Login to the postgres admin panel and create a new server, you can access it in your web browser at:
 
 ```bash
 http://localhost:5050/
 ```
-
 
 ### Step 5: Access the Application
 
