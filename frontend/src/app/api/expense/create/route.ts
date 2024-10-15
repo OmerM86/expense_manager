@@ -5,19 +5,22 @@ export async function POST(request: NextRequest) {
   try {
     const { title, amount, category, date } = await request.json();
 
-    const response = await fetch(`http://${process.env.NEST_HOST}:3001/expense/`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${cookies().get('token')?.value || ''}`,
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `http://${process.env.NEST_HOST}:3001/expense/`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${cookies().get('token')?.value || ''}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          amount: String(amount),
+          cid: parseInt(category),
+          timestamp: date,
+        }),
       },
-      body: JSON.stringify({
-        title,
-        amount: String(amount),
-        cid: parseInt(category),
-        timestamp: date
-      }),
-    });
+    );
     const data = await response.json();
 
     if (response.ok) {

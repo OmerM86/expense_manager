@@ -1,15 +1,23 @@
 'use client';
 
-import { ArcElement, BarElement, CategoryScale, Chart, LinearScale, Title, Tooltip } from 'chart.js';
-import React, { useEffect, useMemo, useState } from 'react'
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart,
+  LinearScale,
+  Title,
+  Tooltip,
+} from 'chart.js';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Data, Expense } from './ExpenseListGroup';
 import DoughnutChart from './DoughnutChart';
 import BarChart from './BarChart';
 
 export interface SortExpense {
-  food: number[],
-  transport: number[],
-  entertainment: number[]
+  food: number[];
+  transport: number[];
+  entertainment: number[];
 }
 
 function Dashboard() {
@@ -23,7 +31,7 @@ function Dashboard() {
   );
 
   const [data, setData] = useState<Data>({});
-  
+
   async function fetchExpenses() {
     try {
       const response = await fetch('api/expense/findAll', {
@@ -75,77 +83,94 @@ function Dashboard() {
   };
 
   const getSortedTotalExpenses = (data: Data) => {
-    let food: number = 0, transport: number = 0, entertainment: number = 0;
+    let food: number = 0,
+      transport: number = 0,
+      entertainment: number = 0;
 
     for (const month in data) {
       const expenses = data[month];
       expenses.forEach((expense) => {
-          switch(expense.category.name) {
-            case "Food":
-              food += parseFloat(expense.amount);
-              break;
-            case "Transport":
-              transport += parseFloat(expense.amount);
-              break;
-            case "Entertainment":
-              entertainment += parseFloat(expense.amount);
-              break;
-          }
+        switch (expense.category.name) {
+          case 'Food':
+            food += parseFloat(expense.amount);
+            break;
+          case 'Transport':
+            transport += parseFloat(expense.amount);
+            break;
+          case 'Entertainment':
+            entertainment += parseFloat(expense.amount);
+            break;
+        }
       });
     }
     return [food, transport, entertainment];
   };
-  
-  const sortMonths = (data: Data): string[] => {  
-    const sortedMonths = Object.keys(data).sort((a, b) => { // sort months
-      const dateA = new Date(a + ' 1');  // + 1 to set the date
-      const dateB = new Date(b + ' 1');  // + 1 to set the date
+
+  const sortMonths = (data: Data): string[] => {
+    const sortedMonths = Object.keys(data).sort((a, b) => {
+      // sort months
+      const dateA = new Date(a + ' 1'); // + 1 to set the date
+      const dateB = new Date(b + ' 1'); // + 1 to set the date
       return dateB.getTime() + dateA.getTime();
     });
     return sortedMonths;
   };
- 
+
   const sortExpenses = (data: Data) => {
     const expenses: SortExpense = {
       food: [],
       transport: [],
-      entertainment: []
+      entertainment: [],
     };
 
     for (const month in data) {
-      const food: number[] = [], transport: number[] = [], entertainment: number[] = [];
+      const food: number[] = [],
+        transport: number[] = [],
+        entertainment: number[] = [];
       data[month].forEach((expense) => {
-        switch(expense.category.name) {
-          case "Food":
+        switch (expense.category.name) {
+          case 'Food':
             food.push(parseFloat(expense.amount));
             break;
-          case "Transport":
+          case 'Transport':
             transport.push(parseFloat(expense.amount));
             break;
-          case "Entertainment":
+          case 'Entertainment':
             entertainment.push(parseFloat(expense.amount));
             break;
         }
       });
       expenses.food.push(food.reduce((sum, value) => sum + value, 0));
       expenses.transport.push(transport.reduce((sum, value) => sum + value, 0));
-      expenses.entertainment.push(entertainment.reduce((sum, value) => sum + value, 0));
+      expenses.entertainment.push(
+        entertainment.reduce((sum, value) => sum + value, 0),
+      );
     }
 
     return expenses;
-  } 
+  };
 
   const totalExpense = useMemo(() => calculateTotal(data), [data]);
-  const sortedTotalExpenses = useMemo(() => getSortedTotalExpenses(data), [data]);
+  const sortedTotalExpenses = useMemo(
+    () => getSortedTotalExpenses(data),
+    [data],
+  );
   const sortedMonths = useMemo(() => sortMonths(data), [data]);
-  const sortedExpenses = useMemo(() => sortExpenses(data), [data])
+  const sortedExpenses = useMemo(() => sortExpenses(data), [data]);
 
   return (
-    <div className="flex h-full w-full items-center justify-between pl-11 pr-[160px] gap-[26px] text-black">
-      <DoughnutChart sortedExpenses={sortedTotalExpenses} totalExpense={totalExpense}/>
-      <BarChart sortedMonths={sortedMonths} sortedExpenses={sortedExpenses} totalExpense={totalExpense} />
+    <div className="flex h-full w-full items-center justify-between gap-[26px] pl-11 pr-[160px] text-black">
+      <DoughnutChart
+        sortedExpenses={sortedTotalExpenses}
+        totalExpense={totalExpense}
+      />
+      <BarChart
+        sortedMonths={sortedMonths}
+        sortedExpenses={sortedExpenses}
+        totalExpense={totalExpense}
+      />
     </div>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

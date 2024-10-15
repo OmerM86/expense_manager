@@ -93,14 +93,14 @@ async function getExpense(
     if (response.ok) {
       const date = new Date(data.timestamp);
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); 
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
-      
+
       return {
         title: data.title,
         amount: data.amount,
         category: data.category.name,
-        timestamp: `${year}-${month}-${day}`
+        timestamp: `${year}-${month}-${day}`,
       };
     } else {
       return [data.message || 'Failed to get expense data'];
@@ -288,7 +288,7 @@ function ExpenseEditForm({
           title: title,
           amount: amount,
           category: cid,
-          timestamp: date
+          timestamp: date,
         }),
       });
 
@@ -344,7 +344,7 @@ function ExpenseEditForm({
         value={category}
         onChange={(e) => setCategory(e.target.value)}
       />
-       <InputComponent
+      <InputComponent
         name={'date'}
         label="Date"
         type="date"
@@ -377,7 +377,7 @@ function ExpenseDeleteForm({
     title: '',
     amount: 0,
     category: '',
-    timestamp: ''
+    timestamp: '',
   });
 
   useEffect(() => {

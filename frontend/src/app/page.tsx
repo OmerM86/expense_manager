@@ -6,7 +6,7 @@ export default function Home() {
     <>
       <SideNavigation />
       <div className="mb-[160px] ml-[80px] mt-[60px] flex flex-col gap-[62px]">
-        <Dashboard/>
+        <Dashboard />
       </div>
     </>
   );

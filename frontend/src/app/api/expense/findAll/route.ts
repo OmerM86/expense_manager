@@ -3,13 +3,16 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch(`http://${process.env.NEST_HOST}:3001/expense/`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${cookies().get('token')?.value || ''}`,
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `http://${process.env.NEST_HOST}:3001/expense/`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${cookies().get('token')?.value || ''}`,
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
     const data = await response.json();
 
     if (response.ok) {
