@@ -28,7 +28,7 @@ function SelectComponent({
         name={name}
         id={name}
         {...props}
-        className="relative w-full rounded-lg border-[1px] border-gray-300 px-[12px] py-[10px] text-sm placeholder:text-gray-400 focus:outline-none"
+        className="relative w-full rounded-lg border-[1px] border-gray-300 px-[12px] py-[10px] text-sm placeholder:text-gray-400 focus:outline-none form-select appearance-none"
       >
         {options.map((optionItem) => (
           <option key={optionItem.value} value={optionItem.value}>
