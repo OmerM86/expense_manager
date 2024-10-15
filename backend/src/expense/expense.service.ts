@@ -47,7 +47,7 @@ export class ExpenseService {
       amount: expenseDto.amount,
       user: user,
       category: category,
-      timestamp: new Date(expenseDto.timestamp)
+      timestamp: new Date(expenseDto.timestamp),
     });
 
     try {
@@ -83,7 +83,7 @@ export class ExpenseService {
           title: expenseDto.title,
           amount: expenseDto.amount,
           category: category,
-          timestamp: new Date(expenseDto.timestamp)
+          timestamp: new Date(expenseDto.timestamp),
         });
         return new ExpneseResponseDto(response);
       } catch {

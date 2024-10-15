@@ -15,26 +15,31 @@ export class CategoryService implements OnApplicationBootstrap {
       {
         cid: 1,
         name: 'Food',
-        color: '4ade80'
+        color: '4ade80',
       },
       {
         cid: 2,
         name: 'Transport',
-        color: 'A1FE4A'
+        color: 'A1FE4A',
       },
       {
         cid: 3,
         name: 'Entertainment',
-        color: '0495D3'
+        color: '0495D3',
       },
     ];
     categories.forEach(async (category) => {
-      const isExist = await this.categoryRepository.findOne({where : {cid: category.cid}});
+      const isExist = await this.categoryRepository.findOne({
+        where: { cid: category.cid },
+      });
       if (!isExist) {
-        const newCategory = this.categoryRepository.create({name: category.name, color: category.color})
+        const newCategory = this.categoryRepository.create({
+          name: category.name,
+          color: category.color,
+        });
         this.categoryRepository.insert(newCategory);
       }
-    })
+    });
   }
 
   async findOne(cid: number): Promise<Category> {
