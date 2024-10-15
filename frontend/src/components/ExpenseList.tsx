@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import ExpenseItem from './ExpenseItem';
-import { CoffeeIcon } from 'lucide-react';
+import { BusIcon, CoffeeIcon, TvIcon, UserIcon } from 'lucide-react';
 import { Expense } from './ExpenseListGroup';
 import { ActionProps } from './ExpenseActionForm';
 
@@ -35,6 +35,18 @@ function ExpenseList({
     setOpenId(openId == id ? null : id);
   };
 
+  const handleIcon = (expense: Expense): JSX.Element => {
+    switch(expense?.category?.name) {
+      case "Food":
+        return <CoffeeIcon style={{ color: `#${expense?.category?.color}` }} />
+      case "Transport":
+        return <BusIcon style={{ color: `#${expense?.category?.color}` }} />
+      case "Entertainment":
+        return <TvIcon style={{ color: `#${expense?.category?.color}` }} />
+    }
+    return <UserIcon style={{ color: `#${expense?.category?.color}`}} />
+  }
+
   const rows: any[] = [];
   expenseList.forEach((expense) => {
     rows.push(
@@ -42,7 +54,7 @@ function ExpenseList({
         key={expense.eid}
         id={expense.eid}
         onClick={() => handleOpenId(expense.eid)}
-        Icon={<CoffeeIcon style={{ color: `#${expense?.category?.color}` }} />}
+        Icon={handleIcon(expense)}
         color={`#${expense?.category?.color}`}
         title={expense.title}
         date={new Date(expense.timestamp)}
