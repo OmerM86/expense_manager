@@ -41,6 +41,8 @@ services:
       - '${NEXT_PORT}:${NEXT_PORT}'
     environment:
       - NEST_HOST=${NEST_HOST}
+    depends_on:
+      - backend
     volumes:
       - ./frontend:/app/src
 
