@@ -334,8 +334,9 @@ function ExpenseEditForm({
         label="Amount"
         placeholder="100"
         type="number"
+        step={0.1}
         value={amount}
-        onChange={(e) => setAmount(parseInt(e.target.value))}
+        onChange={(e) => setAmount(parseFloat(e.target.value))}
       />
       <SelectComponent
         name="category"
@@ -559,8 +560,9 @@ function ExpenseCreateForm({ setAction, fetchExpenses }: ExpenseFormProps) {
         label="Amount"
         placeholder="100"
         type="number"
+        step={0.1}
         value={amount}
-        onChange={(e) => setAmount(parseInt(e.target.value))}
+        onChange={(e) => setAmount(parseFloat(e.target.value))}
       />
       <SelectComponent
         name="category"
