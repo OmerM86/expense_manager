@@ -36,16 +36,16 @@ function ExpenseList({
   };
 
   const handleIcon = (expense: Expense): JSX.Element => {
-    switch(expense?.category?.name) {
-      case "Food":
-        return <CoffeeIcon style={{ color: `#${expense?.category?.color}` }} />
-      case "Transport":
-        return <BusIcon style={{ color: `#${expense?.category?.color}` }} />
-      case "Entertainment":
-        return <TvIcon style={{ color: `#${expense?.category?.color}` }} />
+    switch (expense?.category?.name) {
+      case 'Food':
+        return <CoffeeIcon style={{ color: `#${expense?.category?.color}` }} />;
+      case 'Transport':
+        return <BusIcon style={{ color: `#${expense?.category?.color}` }} />;
+      case 'Entertainment':
+        return <TvIcon style={{ color: `#${expense?.category?.color}` }} />;
     }
-    return <UserIcon style={{ color: `#${expense?.category?.color}`}} />
-  }
+    return <UserIcon style={{ color: `#${expense?.category?.color}` }} />;
+  };
 
   const rows: any[] = [];
   expenseList.forEach((expense) => {

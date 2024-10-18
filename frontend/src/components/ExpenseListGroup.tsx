@@ -4,6 +4,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ExpenseList from './ExpenseList';
 import TotalExpenseItem from './TotalExpenseItem';
 import { Action, ActionProps } from './ExpenseActionForm';
+import FilterGroup from './FilterGroup';
+import { useSearchParams } from 'next/navigation';
 
 export interface Expense {
   eid: number;
@@ -33,6 +35,7 @@ function ExpenseListGroup({ isExpense }: ExpenseListGroupProps) {
     eid: -1,
   });
   const [openId, setOpenId] = useState<number | null>(null);
+  const searchParams = useSearchParams();
 
   async function fetchExpenses() {
     try {
@@ -84,10 +87,10 @@ function ExpenseListGroup({ isExpense }: ExpenseListGroupProps) {
     return total;
   };
 
-  const totalExpense = useMemo(() => calculateTotal(data), [data]);
-
   const sortExpenses = (data: Data): Data => {
     const groupedEntries: Data = {};
+    const categoryFilters = searchParams.getAll('categories');
+    const monthFilter = searchParams.get('month');
 
     Object.keys(data).forEach((key) => {
       groupedEntries[key] = data[key].sort((a, b) => {
@@ -108,16 +111,46 @@ function ExpenseListGroup({ isExpense }: ExpenseListGroupProps) {
     const sortedGroupedEntries: Data = {};
 
     sortedKeys.forEach((key) => {
-      sortedGroupedEntries[key] = groupedEntries[key];
+      const entries = groupedEntries[key];
+
+      if (entries.length > 0) {
+        const filteredEntries = entries.filter((expense) => {
+          const matchesCategory =
+            categoryFilters.length === 0 ||
+            categoryFilters.includes(expense.category.name.toLowerCase());
+
+          const month = new Date(expense.timestamp)
+            .toLocaleString('default', { month: 'long' })
+            .toLowerCase();
+          const matchesMonth =
+            monthFilter === null || monthFilter.includes(month);
+
+          return matchesCategory && matchesMonth;
+        });
+
+        if (filteredEntries.length > 0) {
+          sortedGroupedEntries[key] = filteredEntries;
+        } else {
+          delete sortedGroupedEntries[key];
+        }
+      }
     });
 
     return sortedGroupedEntries;
   };
 
-  const sortedExpenses = useMemo(() => sortExpenses(data), [data]);
+  const sortedExpenses = useMemo(
+    () => sortExpenses(data),
+    [data, searchParams],
+  );
+  const totalExpense = useMemo(
+    () => calculateTotal(sortedExpenses),
+    [sortedExpenses],
+  );
 
   return (
     <div className="flex flex-col gap-[37px]">
+      <FilterGroup />
       {Object.entries(sortedExpenses).map(([month, expenses]) => {
         return (
           <ExpenseList
